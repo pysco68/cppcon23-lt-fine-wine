@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>CppCon 2023 - ⚡ - (Fine) wine and MSVC: what could possibly go wrong - Yannic Staudt</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/robot-lung.css" id="theme">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+	</head>
+	<body>
+		<div class="reveal">
+			<img class="logo" src="assets/tipi.build.svg" width="25%" />
+			 <!-- Any section element inside of this container is displayed as a slide -->
+			 <div class="slides">
+				<section>
+					<img src="assets/wine-bottle-glass-winery.svg" width="25%" />
+					<h1>(Fine) Wine <b>&amp;</b> MSVC</h1>
+					<h3 style="font-size: 1.45em;">what could possibly go wrong?</h3>
+					<p>
+						A story about paths, command line arguments and a <b>LOT</b> of friction
+					</p>
+					<p>
+						<small>CppCon 2023 - <b>lightning talks</b> - Yannic Staudt</small>
+					</p>
+				</section>			
+		
+				<section>
+					<h1>Why <b>would</b></h1>
+					<h2>YOU do <em>that?!</em></h1>
+					<p>
+						(to yourself)
+					</p>
+					<h1 class="fragment" style="font-size: 5em;">🤷‍♂️</h1>
+				</section>
+
+				<section>
+					<img src="assets/award-winery-wine-drink.svg" width="25%" />
+					<h1>Good reasons</h1>
+					<ul>
+						<li class="">Linux' great IO performance</li>
+						<li class="">Less tweaking required for performance OoB</li>
+						<li class="">Forking is <span class="highlight-blue">WAY</span> faster</li>						
+						<li class=""><b>We kinda needed it</b></li>
+					</ul>
+				</section>
+
+				<section>
+					<img src="assets/crushing-wine making-process-winery.svg" width="25%" />
+					<h1>And <b>lots</b> of good reasons</h1>
+					<h3>to not even try</h3>
+					<p>(omitted for sake of not cluttering this slide)</p>
+				</section>
+		  
+		
+		
+				<section>
+					<h2>So...</h2>
+					<div class="fragment">
+						<h1>I went ahead</h1>
+						<h4>and did it anyway</h4>
+						<p>
+							(obviously 🤪)
+						</p>
+					</div>
+				</section>
+		
+				<section data-transition="slide">
+					<img src="assets/bottling-wine making-process-winery.svg" width="25%" />
+				  	<h1>Getting it installed</h1>
+					<p>Botteling up and stuff</p>
+				</section>
+		
+				<section data-transition="slide">
+					<img src="assets/pressing-wine making-process-winery.svg" width="25%" />
+					<h2>And then things got</h2>
+					<h1 class="underlined">Complicated</h1>
+					<p>
+						
+					</p>
+				</section>
+
+
+				
+				<section data-transition="fade">
+					<h2><code>vcvarsall.bat</code></h2>
+					<h1>VS</h1>
+					<h2><code>wine</code></h2>
+
+					<p>
+					When batch files get too complicated
+					</p>
+				</section>
+
+					
+
+				<section data-transition="fade">					
+					<h2 class="strikethrough"><code>vcvarsall.bat</code></h2>
+					<img src="assets/Trash_Can_23.svg" width="25%" />						
+					<p>
+						🎶 Sometimes you've got to say goodbye, <span class="highlight-blue">y'know</span> 🎶
+					</p>
+				</section>				
+		
+				<section>
+					<img src="assets/harvesting-grapes-clusters-winery.svg" width="25%" />
+					<h2>Now for the</h2>
+					<h1><em><b>fun</b></em> part</h1>
+					<p>
+						impedance matching
+					</p>
+				</section>
+
+				<section data-transition="fade">
+					<h1>CMake &amp; Ninja</h1>
+					<h4>Run on linux and are semi-aware that something weird is going on</h4>
+
+					<pre><code class="hljs" data-trim>
+						cl /nologo /TP \
+							-I/home/demo/simple-example \
+							-I/ \
+							-I/usr/local/share/.tipi/vE.w/97861a7-predef.b/23d2f52/installed/include \
+							-I/usr/local/share/.tipi/vE.w/4154c64-json.b/23d2f52/installed/include \
+							-I"/usr/local/share/.tipi/.wine/drive_c/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/ucrt" \
+							-I"/usr/local/share/.tipi/.wine/drive_c/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/shared" \
+							-I"/usr/local/share/.tipi/.wine/drive_c/Program Files (x86)/Windows Kits/10/Include/UCRTVersion/um" \
+							-I"/usr/local/share/.tipi/.wine/drive_c/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/winrt" \
+							-I"/usr/local/share/.tipi/.wine/drive_c/Program Files (x86)/Windows Kits/10/Include/10.0.22621.0/cppwinrt" \
+							-I"/usr/local/share/.tipi/.wine/drive_c/Program Files/Visual Studio 2019/VC/Tools/MSVC/14.37.32822/include" \
+							/showIncludes /GR /EHsc /Ob0 /Od /RTC1 -MDd -std:c++17 /FS 
+							/FoCMakeFiles/simple-app.dir/home/demo/simple-example/simple-app.cpp.obj \
+							/FdCMakeFiles/simple-app.dir/ \							  
+							-c /home/demo/simple-example/simple-app.cpp
+					</code></pre>
+
+				</section>
+
+					
+				<section>
+					<img src="assets/farmer-hold-grape-winery.svg" width="25%"/>
+					<h4>introducing</h4>
+					<h1>intercalaire</h1>
+					<p>A good ol' predictive parser doing MSVC CLI argument rewriting</p>
+				</section>
+
+				<section>
+					<h1>intercalaire</h1>
+					<p>Some key points</p>
+					<ul>
+						<li class="">Used as shimming application on Linux</li>
+						<li class="">Dedicated parsers for <code>CL</code>, <code>LINK</code>, <code>MT</code>, <code>ML</code> &amp; <code>MASM</code></li>
+						<li class="">Knows about all the documented...</li>
+						<li class="">...and a bunch of the not so well documented command line flags of <code>CL.exe</code></li>
+						<li class="">(and more)</li>
+						
+					</ul>
+				</section>
+
+				<section data-transition="fade">
+					<h1>intercalaire</h1>
+					<p>Give it some command line like:</p>
+
+					<pre><code class="hljs" data-trim>
+						intercalaire cl /W4 /EHsc \
+						   /mnt/path/file1.cpp \
+						   /mnt/path2/file2.cpp \
+						   /mnt/path/file3.cpp \
+						   /link \
+						   /out:/mnt/path/build/program1.exe
+					</code></pre>
+				</section>
+
+				<section data-transition="fade">
+					<h1>🪄</h1>
+				</section>
+
+				<section data-transition="fade">
+					<h1>intercalaire</h1>
+					<p>...and it will run CL like:</p>
+
+					<pre><code class="hljs" data-trim>
+						cl /W4 /EHsc \
+						   Z:\mnt\path\file1.cpp \
+						   Z:\mnt\path\file2.cpp \
+						   Z:\mnt\path\file3.cpp \
+						   /link \
+						   /out:Z:\mnt\path\build/program1.exe
+					</code></pre>
+				</section>
+
+
+				<section>
+					<img src="assets/grape-timing-wine making-winery.svg" width="25%"/>
+					<h4>was it worth it?</h4>
+				</section>
+
+				<section>
+					<img src="assets/award-winery-wine-drink.svg" width="25%"/>
+					<h4>h*** yeah!</h4>
+					<ul>
+						<li class="">Cheaper &amp; faster compute in the cloud</li>
+						<li class="">10 - 22% faster builds*</li>
+						<li class="">Cross-cross-compiling for Win-[x86|x64|Arm64]</li>
+						<li class="">We can distribute the builds**</li>
+						<li class="">BONUS: it's wonderfully weird 🦆</li>
+					</ul>
+				</section>
+
+				<section>
+					<img src="assets/serving-wine-hand-drinks.svg" width="25%"/>
+					<h4>Try it</h4>
+					<ul>
+						<li class="">Sign up on <a href="https://tipi.build/">https://tipi.build/</a></li>
+						<li class="">Try our examples with the target <code>linux-wine-msvc</code></li>
+
+						<pre><code class="hljs" data-trim>
+							$ git clone https://github.com/tipi-build/simple-example/
+							$ cd simple-example
+							$ tipi build . -t linux-wine-msvc
+						</code></pre>
+						
+					</ul>
+				</section>
+		
+				<section style="text-align: left;">
+					<img src="assets/natives-dev-feel-at-home-with-tipici.svg" width="40%"/>
+					<h1>THE END</h1>
+
+					<p>P.S.: go watch our talk about build distribution (and more) with CMake on Friday 😉</p>
+				</section>
+		
+			  </div>
+		</div>
+
+		<div class="line top"></div>
+		<div class="line bottom"></div>
+		<div class="line left"></div>
+		<div class="line right"></div>
+
+		<script src="dist/reveal.js"></script>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>		
+		<script src="plugin/zoom/zoom.js"></script>
+		<script>
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				margin: 0.2,
+
+				transition: 'zoom', // none/fade/slide/convex/concave/zoom
+				transitionSpeed: 'fast',
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				/*dependencies: [
+				{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+				{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+				{ src: 'plugin/highlight/plugin.js', async: true },
+				{ src: 'plugin/search/search.js', async: true },
+				{ src: 'plugin/zoom/zoom.js', async: true },
+				{ src: 'plugin/notes/notes.js', async: true }
+				]*/
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealZoom ]
+			});
+		</script>
+	</body>
+</html>
