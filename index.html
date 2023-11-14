@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>CppCon 2023 - ⚡ - (Fine) wine and MSVC: what could possibly go wrong - Yannic Staudt</title>
+		<title>Meeting C++ 2023 - ⚡ - (Fine) wine and MSVC: what could possibly go wrong - Yannic Staudt</title>
 
 		<link rel="stylesheet" href="dist/reset.css">
 		<link rel="stylesheet" href="dist/reveal.css">
@@ -26,7 +26,7 @@
 						A story about paths, command line arguments and a <b>LOT</b> of friction
 					</p>
 					<p>
-						<small>CppCon 2023 - <b>lightning talks</b> - Yannic Staudt</small>
+						<small>Meeting C++ 2023 - <b>lightning talks</b> - Yannic Staudt</small>
 					</p>
 				</section>			
 		
@@ -212,6 +212,54 @@
 				</section>
 
 				<section>
+					<img src="assets/farmer-hold-grape-winery.svg" width="25%"/>
+					<h4>benchmarks, please!</h4>
+					
+					
+					<p>Building <code>boostorg/boost v1.81</code> on my 8c/16t laptop:</p>
+
+					<table>
+
+						<tr>
+							<td>MSVC 2022 on Windows 11:</td>
+							<td><span style="display: inline-block; height: 24px; background-color: #bb00ff42; width: 296px;">12min 6s</span></td>
+						</tr>
+
+						<tr>
+							<td><b>Wine + MSVC</b> in Docker / WSL:</td>
+							<td><span style="display: inline-block; height: 24px; background-color: #00ffcf4f; width: 243px;">9min 57s (-18%)</span></td>
+						</tr>
+
+					</table>
+
+
+				</section>
+				
+				<section>
+					<img src="assets/waiter-wine-dining-service.svg" width="25%"/>
+					<h4>More benchmarks!</h4>
+					
+					
+					<p>Building <code>boostorg/boost v1.81</code> on a 16c/32t cloud machine:</p>
+
+					<table>
+
+						<tr>
+							<td>MSVC 2022 on Windows Server:</td>
+							<td><span style="display: inline-block; height: 24px; background-color: #bb00ff42; width: 296px;">6min 41s</span></td>
+						</tr>
+
+						<tr>
+							<td><b>Wine + MSVC</b> on Linux Server:</td>
+							<td><span style="display: inline-block; height: 24px; background-color: #00ffcf4f; width: 243px;">5min 41s (-18%)</span></td>
+						</tr>
+
+					</table>
+
+
+				</section>
+
+				<section>
 					<img src="assets/serving-wine-hand-drinks.svg" width="25%"/>
 					<h4>Try it</h4>
 					<ul>
@@ -231,7 +279,7 @@
 					<img src="assets/natives-dev-feel-at-home-with-tipici.svg" width="40%"/>
 					<h1>THE END</h1>
 
-					<p>P.S.: go watch our talk about build distribution (and more) with CMake on Friday 😉</p>
+					<p>P.S.: come talk to us at the booth, we do a lot of cool and less weird stuff too 😉</p>
 				</section>
 		
 			  </div>
